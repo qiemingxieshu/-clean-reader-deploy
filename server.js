@@ -1,16 +1,21 @@
 const express = require('express');
-const fetch = require('node-fetch');
 const { JSDOM } = require('jsdom');
 const { Readability } = require('@mozilla/readability');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 
 // 中间件
 app.use(cors());
 app.use(express.json());
-const path = require('path');
-app.use(express.static(path.join(__dirname, '.'))); // 静态文件（从当前目录加载）
+// 静态文件：从当前目录加载（根目录）
+app.use(express.static(__dirname));
+
+// 首页
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // 提取内容 API
 app.post('/api/extract', async (req, res) => {
@@ -20,7 +25,7 @@ app.post('/api/extract', async (req, res) => {
   }
 
   try {
-    // 获取网页内容
+    // 使用原生 fetch (Node 18+)
     const response = await fetch(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
@@ -141,10 +146,5 @@ function isValidLink(href) {
   return true;
 }
 
-// 首页
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html')); // 从当前目录加载
-});
-
-// Vercel 兼容：导出 app
+// Vercel Serverless 兼容：导出 app 作为 handler
 module.exports = app;
