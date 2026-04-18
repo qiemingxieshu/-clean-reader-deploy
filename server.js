@@ -9,7 +9,8 @@ const app = express();
 // 中间件
 app.use(cors());
 app.use(express.json());
-app.use(express.static('.')); // 静态文件（从根目录加载）
+const path = require('path');
+app.use(express.static(path.join(__dirname, '.'))); // 静态文件（从当前目录加载）
 
 // 提取内容 API
 app.post('/api/extract', async (req, res) => {
@@ -142,7 +143,7 @@ function isValidLink(href) {
 
 // 首页
 app.get('/', (req, res) => {
-  res.sendFile('index.html'); // 从根目录加载
+  res.sendFile(path.join(__dirname, 'index.html')); // 从当前目录加载
 });
 
 // Vercel 兼容：导出 app
