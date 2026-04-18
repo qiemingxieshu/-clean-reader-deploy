@@ -2,12 +2,21 @@ const express = require('express');
 const { JSDOM } = require('jsdom');
 const { Readability } = require('@mozilla/readability');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 
 // 中间件：允许所有来源访问（CORS）
 app.use(cors({ origin: '*' }));
 app.use(express.json());
+
+// 静态文件：从当前目录加载（根目录）
+app.use(express.static(path.join(__dirname, '.')));
+
+// 首页（显式指定，防止 404）
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // 提取内容 API
 app.post('/api/extract', async (req, res) => {
