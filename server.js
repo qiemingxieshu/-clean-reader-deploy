@@ -157,8 +157,5 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`📖 Clean Reader is running at http://localhost:${PORT}`);
-  console.log(`📱 Also accessible at http://192.168.3.52:${PORT} (mobile)`);
-  console.log('🚀 Features: Chapters, Prev/Next navigation, PWA support');
-});
+// Vercel Serverless 兼容：导出 handler 而不是启动监听
+module.exports = app;
