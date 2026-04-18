@@ -6,11 +6,11 @@ const path = require('path');
 
 const app = express();
 
-// 中间件
-app.use(cors());
+// 中间件：允许所有来源访问（CORS）
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 // 静态文件：从当前目录加载（根目录）
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, '.')));
 
 // 首页
 app.get('/', (req, res) => {
