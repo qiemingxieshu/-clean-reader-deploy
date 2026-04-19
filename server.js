@@ -147,5 +147,16 @@ function isValidLink(href) {
   return true;
 }
 
-// Vercel Serverless 兼容：导出 app 作为 handler
+// 获取端口（Render 会设置 PORT 环境变量）
+const PORT = process.env.PORT || 10000;
+
+// 启动服务器（仅在非 Serverless 环境下）
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`✅ Server running on port ${PORT}`);
+    console.log(`🌐 Access at: http://localhost:${PORT}`);
+  });
+}
+
+// Vercel Serverless 兼容：导出 app 作为 handler（可选）
 module.exports = app;
